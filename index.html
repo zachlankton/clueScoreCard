@@ -1,9 +1,1334 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js" integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0=" crossorigin="anonymous"></script>
-</head>
-<body>
-<h1>Hello World!</h1>
-  <i class="fas fa-chess-pawn"></i>
-</body>
+  <head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Clue Scorecard</title>
+  <meta name="author" content="Zach Lankton">
+  <meta name="description" content="A simple App To keep track of suggestions and clues on your mobile device during a game of clue">
+  <meta name="keywords" content="game,board-games,games,hasbro,clue,board-game">
+  <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+  
+
+  <style>
+    th, td {
+      /* border: 1px solid black; */
+      background-color:#ffffffbf;
+      height: calc( ( 100vh - 325px ) / 24);
+      font-weight:400;
+      overflow:hidden;
+    }
+    th:first-child{
+      text-align:left;
+    }
+    th:only-child{
+        text-align:center;
+        font-weight:900;
+    }
+    th[who]{
+        text-align:center;
+        font-weight:900;
+    }
+    table {
+      width: calc(100vw - 20px);
+      table-layout: fixed;
+    }
+    [hide]{
+        visibility: hidden;
+    }
+    th[players]{
+        background-color: unset;
+        border: unset;
+        color: white;
+        text-align: right;
+        font-weight: 900;
+        font-size: 5pt;
+    }
+    html, body{
+      background-color:cornflowerblue;
+      color:darkblue;
+      padding-left:5px;
+      padding-right:5px;
+      padding-top:0px;
+      margin:0px;
+      font-size: 8pt;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: 400;
+    }
+    tr[green]{
+        background-color:green;
+    }
+    tr[mustard]{
+        background-color:yellow;
+    }
+    tr[orchid]{
+        background-color:pink;
+    }
+    tr[peacock]{
+        background-color:cyan;
+    }
+    tr[plum]{
+        background-color:blue;
+    }
+    tr[scarlett]{
+        background-color:red;
+    }
+    tr[white]{
+        background-color:white;
+    }
+    tr[black]{
+        background-color:black;
+    }
+    h1{
+        margin: 0px 0px 0px 0px;
+        padding: 5px;
+        text-align:center;
+    }
+    th:nth-child(3){
+        border: 1px green solid;
+    }
+    th:nth-child(4){
+        border: 1px yellow solid;
+    }
+    th:nth-child(5){
+        border: 1px pink solid;
+    }
+    th:nth-child(6){
+        border: 1px cyan solid;
+    }
+    th:nth-child(7){
+        border: 1px purple solid;
+    }
+    th:nth-child(8){
+        border: 1px red solid;
+    }
+    
+  </style>
+  </head>
+  <body>
+      <h1>Clue Scorecard</h1>
+    <table d-data name="scorecard" onclick="showForm(event)">
+        <colgroup>
+            <col span="1" style="">
+            <col span="1" style="width: 11%;">
+            <col span="1" style="width: 11%;">
+            <col span="1" style="width: 11%;">
+            <col span="1" style="width: 11%;">
+            <col span="1" style="width: 11%;">
+            <col span="1" style="width: 11%;">
+            <col span="1" style="width: 11%;">
+         </colgroup>
+         <tr onclick="changeName(event)">
+            <th hide></th>
+            <th players>Players:</th>
+            <th name="player1">Me</th>
+            <th name="player2">2</th>
+            <th name="player3">3</th>
+            <th name="player4">4</th>
+            <th name="player5">5</th>
+            <th name="player6">6</th>
+          </tr>
+      <tr>
+        <th who>Who?</th>
+      </tr>
+      <tr green>
+        <th>Green</th>
+        <th><span stat name="green_status">X</span> <span cnt name="green_sc">1</span></th>
+        <th><span stat name="green_status_p1">X</span> <span cnt name="green_p1_sc">1</span></th>
+        <th><span stat name="green_status_p2">S</span> <span cnt name="green_p2_sc">5</span></th>
+        <th><span stat name="green_status_p3">S</span> <span cnt name="green_p3_sc">5</span></th>
+        <th><span stat name="green_status_p4">S</span> <span cnt name="green_p4_sc">5</span></th>
+        <th><span stat name="green_status_p5">S</span> <span cnt name="green_p5_sc">5</span></th>
+        <th><span stat name="green_status_p6">S</span> <span cnt name="green_p6_sc">5</span></th>
+      </tr>
+      <tr mustard>
+        <th>Mustard</th>
+        <th><span stat name="mustard_status">X</span> <span cnt name="mustard_sc">2</span></th>
+        <th><span stat name="mustard_status_p1">X</span> <span cnt name="mustard_p1_sc">2</span></th>
+        <th><span stat name="mustard_status_p2">X</span> <span cnt name="mustard_p2_sc">2</span></th>
+        <th><span stat name="mustard_status_p3">X</span> <span cnt name="mustard_p3_sc">2</span></th>
+        <th><span stat name="mustard_status_p4">X</span> <span cnt name="mustard_p4_sc">2</span></th>
+        <th><span stat name="mustard_status_p5">X</span> <span cnt name="mustard_p5_sc">2</span></th>
+        <th><span stat name="mustard_status_p6">X</span> <span cnt name="mustard_p6_sc">2</span></th>
+      </tr>
+      <tr orchid>
+        <th>Orchid</th>
+        <th><span stat name="orchid_status">X</span> <span cnt name="orchid_sc">2</span></th>
+        <th><span stat name="orchid_status_p1">X</span> <span cnt name="orchid_p1_sc">2</span></th>
+        <th><span stat name="orchid_status_p2">X</span> <span cnt name="orchid_p2_sc">2</span></th>
+        <th><span stat name="orchid_status_p3">X</span> <span cnt name="orchid_p3_sc">2</span></th>
+        <th><span stat name="orchid_status_p4">X</span> <span cnt name="orchid_p4_sc">2</span></th>
+        <th><span stat name="orchid_status_p5">X</span> <span cnt name="orchid_p5_sc">2</span></th>
+        <th><span stat name="orchid_status_p6">X</span> <span cnt name="orchid_p6_sc">2</span></th>
+      </tr>
+      <tr peacock>
+        <th>Peacock</th>
+        <th><span stat name="peacock_status">X</span> <span cnt name="peacock_sc">2</span></th>
+        <th><span stat name="peacock_status_p1">X</span> <span cnt name="peacock_p1_sc">2</span></th>
+        <th><span stat name="peacock_status_p2">X</span> <span cnt name="peacock_p2_sc">2</span></th>
+        <th><span stat name="peacock_status_p3">X</span> <span cnt name="peacock_p3_sc">2</span></th>
+        <th><span stat name="peacock_status_p4">X</span> <span cnt name="peacock_p4_sc">2</span></th>
+        <th><span stat name="peacock_status_p5">X</span> <span cnt name="peacock_p5_sc">2</span></th>
+        <th><span stat name="peacock_status_p6">X</span> <span cnt name="peacock_p6_sc">2</span></th>
+      </tr>
+      <tr plum>
+        <th>Plum</th>
+        <th><span stat name="plum_status">X</span> <span cnt name="plum_sc">2</span></th>
+        <th><span stat name="plum_status_p1">X</span> <span cnt name="plum_p1_sc">2</span></th>
+        <th><span stat name="plum_status_p2">X</span> <span cnt name="plum_p2_sc">2</span></th>
+        <th><span stat name="plum_status_p3">X</span> <span cnt name="plum_p3_sc">2</span></th>
+        <th><span stat name="plum_status_p4">X</span> <span cnt name="plum_p4_sc">2</span></th>
+        <th><span stat name="plum_status_p5">X</span> <span cnt name="plum_p5_sc">2</span></th>
+        <th><span stat name="plum_status_p6">X</span> <span cnt name="plum_p6_sc">2</span></th>
+      </tr>
+      <tr scarlett>
+        <th>Scarlett</th>
+        <th><span stat name="scarlett_status">X</span> <span cnt name="scarlett_sc">2</span></th>
+        <th><span stat name="scarlett_status_p1">X</span> <span cnt name="scarlett_p1_sc">2</span></th>
+        <th><span stat name="scarlett_status_p2">X</span> <span cnt name="scarlett_p2_sc">2</span></th>
+        <th><span stat name="scarlett_status_p3">X</span> <span cnt name="scarlett_p3_sc">2</span></th>
+        <th><span stat name="scarlett_status_p4">X</span> <span cnt name="scarlett_p4_sc">2</span></th>
+        <th><span stat name="scarlett_status_p5">X</span> <span cnt name="scarlett_p5_sc">2</span></th>
+        <th><span stat name="scarlett_status_p6">X</span> <span cnt name="scarlett_p6_sc">2</span></th>
+      </tr>
+      <tr>
+        <th>What?</th>
+      </tr>
+      <tr green>
+        <th>Candlestick</th>
+        <th><span stat name="candlestick_status">X</span> <span cnt name="candlestick_sc">2</span></th>
+        <th><span stat name="candlestick_status_p1">X</span> <span cnt name="candlestick_p1_sc">2</span></th>
+        <th><span stat name="candlestick_status_p2">X</span> <span cnt name="candlestick_p2_sc">2</span></th>
+        <th><span stat name="candlestick_status_p3">X</span> <span cnt name="candlestick_p3_sc">2</span></th>
+        <th><span stat name="candlestick_status_p4">X</span> <span cnt name="candlestick_p4_sc">2</span></th>
+        <th><span stat name="candlestick_status_p5">X</span> <span cnt name="candlestick_p5_sc">2</span></th>
+        <th><span stat name="candlestick_status_p6">X</span> <span cnt name="candlestick_p6_sc">2</span></th>
+      </tr>
+      <tr mustard>
+        <th>Dagger</th>
+        <th><span stat name="dagger_status">X</span> <span cnt name="dagger_sc">2</span></th>
+        <th><span stat name="dagger_status_p1">X</span> <span cnt name="dagger_p1_sc">2</span></th>
+        <th><span stat name="dagger_status_p2">X</span> <span cnt name="dagger_p2_sc">2</span></th>
+        <th><span stat name="dagger_status_p3">X</span> <span cnt name="dagger_p3_sc">2</span></th>
+        <th><span stat name="dagger_status_p4">X</span> <span cnt name="dagger_p4_sc">2</span></th>
+        <th><span stat name="dagger_status_p5">X</span> <span cnt name="dagger_p5_sc">2</span></th>
+        <th><span stat name="dagger_status_p6">X</span> <span cnt name="dagger_p6_sc">2</span></th>
+      </tr>
+      <tr orchid>
+        <th>Lead Pipe</th>
+        <th><span stat name="leadpipe_status">X</span> <span cnt name="leadpipe_sc">2</span></th>
+        <th><span stat name="leadpipe_status_p1">X</span> <span cnt name="leadpipe_p1_sc">2</span></th>
+        <th><span stat name="leadpipe_status_p2">X</span> <span cnt name="leadpipe_p2_sc">2</span></th>
+        <th><span stat name="leadpipe_status_p3">X</span> <span cnt name="leadpipe_p3_sc">2</span></th>
+        <th><span stat name="leadpipe_status_p4">X</span> <span cnt name="leadpipe_p4_sc">2</span></th>
+        <th><span stat name="leadpipe_status_p5">X</span> <span cnt name="leadpipe_p5_sc">2</span></th>
+        <th><span stat name="leadpipe_status_p6">X</span> <span cnt name="leadpipe_p6_sc">2</span></th>
+      </tr>
+      <tr peacock>
+        <th>Revolver</th>
+        <th><span stat name="revolver_status">X</span> <span cnt name="revolver_sc">2</span></th>
+        <th><span stat name="revolver_status_p1">X</span> <span cnt name="revolver_p1_sc">2</span></th>
+        <th><span stat name="revolver_status_p2">X</span> <span cnt name="revolver_p2_sc">2</span></th>
+        <th><span stat name="revolver_status_p3">X</span> <span cnt name="revolver_p3_sc">2</span></th>
+        <th><span stat name="revolver_status_p4">X</span> <span cnt name="revolver_p4_sc">2</span></th>
+        <th><span stat name="revolver_status_p5">X</span> <span cnt name="revolver_p5_sc">2</span></th>
+        <th><span stat name="revolver_status_p6">X</span> <span cnt name="revolver_p6_sc">2</span></th>
+      </tr>
+      <tr plum>
+        <th>Rope</th>
+        <th><span stat name="rope_status">X</span> <span cnt name="rope_sc">2</span></th>
+        <th><span stat name="rope_status_p1">X</span> <span cnt name="rope_p1_sc">2</span></th>
+        <th><span stat name="rope_status_p2">X</span> <span cnt name="rope_p2_sc">2</span></th>
+        <th><span stat name="rope_status_p3">X</span> <span cnt name="rope_p3_sc">2</span></th>
+        <th><span stat name="rope_status_p4">X</span> <span cnt name="rope_p4_sc">2</span></th>
+        <th><span stat name="rope_status_p5">X</span> <span cnt name="rope_p5_sc">2</span></th>
+        <th><span stat name="rope_status_p6">X</span> <span cnt name="rope_p6_sc">2</span></th>
+      </tr>
+      <tr scarlett>
+        <th>Wrench</th>
+        <th><span stat name="wrench_status">X</span> <span cnt name="wrench_sc">2</span></th>
+        <th><span stat name="wrench_status_p1">X</span> <span cnt name="wrench_p1_sc">2</span></th>
+        <th><span stat name="wrench_status_p2">X</span> <span cnt name="wrench_p2_sc">2</span></th>
+        <th><span stat name="wrench_status_p3">X</span> <span cnt name="wrench_p3_sc">2</span></th>
+        <th><span stat name="wrench_status_p4">X</span> <span cnt name="wrench_p4_sc">2</span></th>
+        <th><span stat name="wrench_status_p5">X</span> <span cnt name="wrench_p5_sc">2</span></th>
+        <th><span stat name="wrench_status_p6">X</span> <span cnt name="wrench_p6_sc">2</span></th>
+      </tr>
+      <tr>
+        <th>Where?</th>
+      </tr>
+      <tr green>
+        <th>Ballroom</th>
+        <th><span stat name="ballroom_status">X</span> <span cnt name="ballroom_sc">2</span></th>
+        <th><span stat name="ballroom_status_p1">X</span> <span cnt name="ballroom_p1_sc">2</span></th>
+        <th><span stat name="ballroom_status_p2">X</span> <span cnt name="ballroom_p2_sc">2</span></th>
+        <th><span stat name="ballroom_status_p3">X</span> <span cnt name="ballroom_p3_sc">2</span></th>
+        <th><span stat name="ballroom_status_p4">X</span> <span cnt name="ballroom_p4_sc">2</span></th>
+        <th><span stat name="ballroom_status_p5">X</span> <span cnt name="ballroom_p5_sc">2</span></th>
+        <th><span stat name="ballroom_status_p6">X</span> <span cnt name="ballroom_p6_sc">2</span></th>
+      </tr>
+      <tr mustard>
+        <th>Billiard</th>
+        <th><span stat name="billiard_status">X</span> <span cnt name="billiard_sc">2</span></th>
+        <th><span stat name="billiard_status_p1">X</span> <span cnt name="billiard_p1_sc">2</span></th>
+        <th><span stat name="billiard_status_p2">X</span> <span cnt name="billiard_p2_sc">2</span></th>
+        <th><span stat name="billiard_status_p3">X</span> <span cnt name="billiard_p3_sc">2</span></th>
+        <th><span stat name="billiard_status_p4">X</span> <span cnt name="billiard_p4_sc">2</span></th>
+        <th><span stat name="billiard_status_p5">X</span> <span cnt name="billiard_p5_sc">2</span></th>
+        <th><span stat name="billiard_status_p6">X</span> <span cnt name="billiard_p6_sc">2</span></th>
+      </tr>
+      <tr orchid>
+        <th>Conserve</th>
+        <th><span stat name="conserve_status">X</span> <span cnt name="conserve_sc">2</span></th>
+        <th><span stat name="conserve_status_p1">X</span> <span cnt name="conserve_p1_sc">2</span></th>
+        <th><span stat name="conserve_status_p2">X</span> <span cnt name="conserve_p2_sc">2</span></th>
+        <th><span stat name="conserve_status_p3">X</span> <span cnt name="conserve_p3_sc">2</span></th>
+        <th><span stat name="conserve_status_p4">X</span> <span cnt name="conserve_p4_sc">2</span></th>
+        <th><span stat name="conserve_status_p5">X</span> <span cnt name="conserve_p5_sc">2</span></th>
+        <th><span stat name="conserve_status_p6">X</span> <span cnt name="conserve_p6_sc">2</span></th>
+      </tr>
+      <tr peacock>
+        <th>Dining</th>
+        <th><span stat name="dining_status">X</span> <span cnt name="dining_sc">2</span></th>
+        <th><span stat name="dining_status_p1">X</span> <span cnt name="dining_p1_sc">2</span></th>
+        <th><span stat name="dining_status_p2">X</span> <span cnt name="dining_p2_sc">2</span></th>
+        <th><span stat name="dining_status_p3">X</span> <span cnt name="dining_p3_sc">2</span></th>
+        <th><span stat name="dining_status_p4">X</span> <span cnt name="dining_p4_sc">2</span></th>
+        <th><span stat name="dining_status_p5">X</span> <span cnt name="dining_p5_sc">2</span></th>
+        <th><span stat name="dining_status_p6">X</span> <span cnt name="dining_p6_sc">2</span></th>
+      </tr>
+      <tr plum>
+        <th>Hall</th>
+        <th><span stat name="hall_status">X</span> <span cnt name="hall_sc">2</span></th>
+        <th><span stat name="hall_status_p1">X</span> <span cnt name="hall_p1_sc">2</span></th>
+        <th><span stat name="hall_status_p2">X</span> <span cnt name="hall_p2_sc">2</span></th>
+        <th><span stat name="hall_status_p3">X</span> <span cnt name="hall_p3_sc">2</span></th>
+        <th><span stat name="hall_status_p4">X</span> <span cnt name="hall_p4_sc">2</span></th>
+        <th><span stat name="hall_status_p5">X</span> <span cnt name="hall_p5_sc">2</span></th>
+        <th><span stat name="hall_status_p6">X</span> <span cnt name="hall_p6_sc">2</span></th>
+      </tr>
+      <tr scarlett>
+        <th>Kitchen</th>
+        <th><span stat name="kitchen_status">X</span> <span cnt name="kitchen_sc">2</span></th>
+        <th><span stat name="kitchen_status_p1">X</span> <span cnt name="kitchen_p1_sc">2</span></th>
+        <th><span stat name="kitchen_status_p2">X</span> <span cnt name="kitchen_p2_sc">2</span></th>
+        <th><span stat name="kitchen_status_p3">X</span> <span cnt name="kitchen_p3_sc">2</span></th>
+        <th><span stat name="kitchen_status_p4">X</span> <span cnt name="kitchen_p4_sc">2</span></th>
+        <th><span stat name="kitchen_status_p5">X</span> <span cnt name="kitchen_p5_sc">2</span></th>
+        <th><span stat name="kitchen_status_p6">X</span> <span cnt name="kitchen_p6_sc">2</span></th>
+      </tr>
+      <tr>
+        <th>Library</th>
+        <th><span stat name="library_status">X</span> <span cnt name="library_sc">2</span></th>
+        <th><span stat name="library_status_p1">X</span> <span cnt name="library_p1_sc">2</span></th>
+        <th><span stat name="library_status_p2">X</span> <span cnt name="library_p2_sc">2</span></th>
+        <th><span stat name="library_status_p3">X</span> <span cnt name="library_p3_sc">2</span></th>
+        <th><span stat name="library_status_p4">X</span> <span cnt name="library_p4_sc">2</span></th>
+        <th><span stat name="library_status_p5">X</span> <span cnt name="library_p5_sc">2</span></th>
+        <th><span stat name="library_status_p6">X</span> <span cnt name="library_p6_sc">2</span></th>
+      </tr>
+      <tr white>
+        <th>Lounge</th>
+        <th><span stat name="lounge_status">X</span> <span cnt name="lounge_sc">2</span></th>
+        <th><span stat name="lounge_status_p1">X</span> <span cnt name="lounge_p1_sc">2</span></th>
+        <th><span stat name="lounge_status_p2">X</span> <span cnt name="lounge_p2_sc">2</span></th>
+        <th><span stat name="lounge_status_p3">X</span> <span cnt name="lounge_p3_sc">2</span></th>
+        <th><span stat name="lounge_status_p4">X</span> <span cnt name="lounge_p4_sc">2</span></th>
+        <th><span stat name="lounge_status_p5">X</span> <span cnt name="lounge_p5_sc">2</span></th>
+        <th><span stat name="lounge_status_p6">X</span> <span cnt name="lounge_p6_sc">2</span></th>
+      </tr>
+      <tr black>
+        <th>Study</th>
+        <th><span stat name="study_status">X</span> <span cnt name="study_sc">2</span></th>
+        <th><span stat name="study_status_p1">X</span> <span cnt name="study_p1_sc">2</span></th>
+        <th><span stat name="study_status_p2">X</span> <span cnt name="study_p2_sc">2</span></th>
+        <th><span stat name="study_status_p3">X</span> <span cnt name="study_p3_sc">2</span></th>
+        <th><span stat name="study_status_p4">X</span> <span cnt name="study_p4_sc">2</span></th>
+        <th><span stat name="study_status_p5">X</span> <span cnt name="study_p5_sc">2</span></th>
+        <th><span stat name="study_status_p6">X</span> <span cnt name="study_p6_sc">2</span></th>
+      </tr>
+    </table>
+
+
+    <style>
+        div[name="cellForm"]{
+            z-index: 50;
+            position:absolute;
+            background-color:white;
+            color: black;
+            border: 1px solid black;
+            border-radius: 5px;
+            top:100px;
+            left: 10px;
+            right: 10px;
+            padding: 10px;
+            box-shadow: 0 0 20px 2px black
+        }
+
+        div[name="cellForm"]:before{
+            position: absolute;
+            display:inline-block;
+            z-index: 100;
+            content: "";
+            width:20px;
+            height: 20px;
+            border-top:1px solid black;
+            border-left:1px solid black;
+            background-color:white;
+            
+        }
+        div[name="cellForm"].top:before{
+            transform: rotate(45deg);
+            top: -11px;
+        }
+        div[name="cellForm"].bottom:before{
+            transform: rotate(225deg);
+            bottom: -11px;
+        }
+
+        div[name="cellForm"].p1:before{left: calc(40% - 13px);}
+        div[name="cellForm"].p2:before{left: calc(51% - 13px);}
+        div[name="cellForm"].p3:before{left: calc(62% - 13px);}
+        div[name="cellForm"].p4:before{left: calc(73% - 13px);}
+        div[name="cellForm"].p5:before{left: calc(84% - 13px);}
+        div[name="cellForm"].p6:before{left: calc(95% - 13px);}
+
+        #overlay{
+            position:fixed;
+            z-index: 25;
+            background-color:black;
+            opacity: 0.3;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+        }
+        fieldset {
+            border:none;
+            display: flex;
+        }
+
+        [column]{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        [row]{
+            display:flex;
+        }
+
+        [rBtn]{
+            flex:1;
+            
+        }
+
+        [rBtn]>input{
+            display: none;
+        }
+
+        [rBtn]>label{
+            
+            text-align:center;
+            min-width: 30px;
+            display:inline-block;
+            padding: 10px;
+            border: 1px solid gray;
+            background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+        }
+
+        [rBtn]>input:checked + label{
+            background: linear-gradient(to bottom, #d2ff52 0%,#91e842 100%);
+        }
+
+    </style>
+    <div id="overlay" onclick="hideForm()" style="display:none;"></div>
+    <div column d-data name="cellForm" id="edit_form" style="display:none;" class="top p1">
+        <div row>
+            <h3>Status</h3>
+        </div>
+        <fieldset>
+            <div row onclick="setStatus(event)">
+                <div rBtn>
+                    <input type="radio" name="status" value="" checked="yes">
+                    <label>None</label>
+                </div>
+                <div rBtn>
+                    <input type="radio" name="status" value="X" >
+                    <label>X</label>
+                </div>
+                <div rBtn>
+                    <input type="radio" name="status" value="O" >
+                    <label>O</label>
+                </div>
+                <div rBtn>
+                    <input type="radio" name="status" value="S" >
+                    <label>S</label>
+                </div>
+                <div rBtn>
+                    <input type="radio" name="status" value="?" >
+                    <label>?</label>
+                </div>
+            </div>
+            
+        </fieldset>
+        <div row>
+            <h3>Suggestion Count</h3>
+        </div>
+        <div row>
+            <div rBtn>
+                <label onclick="decCount(event)">-</label>
+                <label name="count">0</label>
+                <label onclick="incCount(event)">+</label>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        button[reset]{
+            width: calc(100% - 200px);
+            height: 60px;
+            margin: 100px;
+
+
+        }
+    </style>
+    <button reset onclick="resetForm()">RESET</button>
+
+    <script>
+        (function dDataPrototypeBuilder() {
+        
+            window.dData = {};
+            var templates = {}
+        
+            dData.templates = templates;
+            dData.cacheTemplates = cacheTemplates;
+            dData.addTemplate = addTemplate;
+            dData.insertTemplate = insertTemplate;
+            dData.add = add;
+            dData.remove = remove;
+            dData.dDataSet = dDataSet;
+            dData.dDataGet = dDataGet;
+        
+            function cacheTemplates() {
+                var dDataElements = document.querySelectorAll("[d-data]");
+                var dDataLen = dDataElements.length;
+                var templatesToRender = [];
+        
+                // first label all template parents and strip template ("d-data") elements from the DOM
+                
+                for (var i = 0; i < dDataLen; i++) {
+                    var elem = dDataElements[i];
+                    var name = elem.getAttribute("name");
+                    
+                    
+                    // for all d-data elements create a place holder div
+                    // a template-placeholder for templates to be reinserted after
+                    var div = document.createElement("div");
+                    div.setAttribute("template-placeholder", name);
+                    div.style.display = "none"
+                    elem.parentElement.insertBefore(div, elem);
+                    
+                    
+                    // if this dData Element is Top Level than push to render list
+                    // and add it to d-data Global
+                    if (!isDDataChild(elem)) {
+                        templatesToRender.push(name);
+                        setupDataObject(div, name);
+                    } 
+                    
+                    
+                    elem.remove();
+                    
+                }
+        
+                for (var i = 0; i < dDataLen; i++) {
+                    var elem = dDataElements[i];
+                    var name = elem.getAttribute("name");
+                    createTemplate(elem, name);
+                }
+        
+                var tLen = templatesToRender.length;
+                for (var i = 0; i < tLen; i++) {
+                    var name = templatesToRender[i];
+                    dData[name] = {};
+                }
+        
+            }
+        
+            function createTemplate(element, name) {
+                var template = document.createElement("template");
+                template.content.appendChild(element);
+                templates[name] = template;
+            }
+        
+            function isDDataChild(elem) {
+                var isChild = false;
+                while (elem.parentElement != document.body) {
+                    if (elem.parentElement.hasAttribute("d-data")) {
+                        isChild = true;
+                        break;
+                    }
+                    elem = elem.parentElement;
+                }
+                return isChild;
+            }
+        
+            function setupDataObject(elem, name) {
+                window.dataElms = {};
+        
+                Object.defineProperty(dData, name, {
+                    get,
+                    set
+                });
+        
+                function get() {
+                    return dDataGet(elem.nextElementSibling);
+                }
+        
+                function set(data) {
+                    var dDataElm = elem.nextElementSibling;
+                    if (dDataElm && dDataElm.hasAttribute("d-data") && dDataElm.getAttribute("name") == name){
+                        elem.nextElementSibling.remove();    
+                    }
+                    return insertTemplate(templates[name], elem, data);
+                }
+            }
+        
+            cacheTemplates();
+        
+            function dDataGet(selector) {
+        
+                var parentElm = undefined;
+                if (selector.attributes != undefined) {
+                    // Selector can be either a string or an actual element
+                    parentElm = selector;
+                } else {
+                    parentElm = document.querySelector(selector);
+                }
+        
+                var dDataObject = {};
+                Object.defineProperty(dDataObject, "element", {
+                    value: parentElm
+                });
+                
+                Object.defineProperty(dDataObject, "remove", {
+                    value: function() {
+                        parentElm.remove();
+                    }
+                });
+        
+                                    // doing this crazy nonsense to return an array instead of node list
+                var namedElements = Array.prototype.slice.call( parentElm.querySelectorAll("[name]") );
+                var templateParentElements = Array.prototype.slice.call( parentElm.querySelectorAll("[template-placeholder]") );
+                var props = namedElements.concat(templateParentElements);
+                var propsLen = props.length;
+        
+                for (var i = 0; i < propsLen; i++) {
+                    var propElm = props[i];
+                    if ( propElm.hasAttribute("template-placeholder") ){ setupTemplateParent(); continue; }
+                    var propName = propElm.getAttribute("name")
+                    if (belongsToCurrentParent(propElm)) {
+                        if (hasChildren(propElm)) {
+                            if (isArray(propElm)) {
+                                // There are multiple instances of this property with children
+                                dDataArrProp(propElm);
+                            } else {
+                                // This is a single instance of this property with children
+                                dDataObjProp(propElm);
+                            }
+                        } else {
+                            // This property is a single value property
+                            dDataValProp(propElm);
+        
+                        }
+                    }
+        
+                }
+        
+                return dDataObject;
+                
+                function setupTemplateParent(){
+                    var tParentName = propElm.getAttribute("template-placeholder");
+                    var template = dData.templates[tParentName];
+                    if (dDataObject[tParentName] == undefined){
+                        Object.defineProperty(dDataObject, tParentName, {get});
+                    }
+                    
+                    function get(){
+                        return {
+                            add: function(data) {
+                                dData.insertTemplate(template, propElm, data);
+                            }  
+                        };
+                    }
+                }
+        
+                function dDataArrProp(e) {
+                    var propName = e.getAttribute("name")
+                    if (dDataObject[propName] == undefined) {
+                        dDataObject[propName] = [];
+                        
+                        var parent = e.parentElement
+                        Object.defineProperty(dDataObject[propName], "element", {
+                            value: parent
+                        });
+                        
+                        
+                        Object.defineProperty(dDataObject[propName], "add", {
+                            value: function(data) {
+                                var template = dData.templates[propName];
+                                dData.insertTemplate(template, e, data);
+                            }
+                        });
+                        
+                    }
+                    dDataObject[propName].push(dDataGet(e));
+                }
+        
+                function dDataObjProp(e) {
+                    dDataObject[propName] = dDataGet(e);
+                }
+        
+                function dDataValProp(e) {
+                    if (dDataObject.hasOwnProperty(propName)){ return 0; }
+                    Object.defineProperty(dDataObject, propName, {
+                        get,
+                        set,
+                        enumerable: true
+                    });
+        
+                    Object.defineProperty(dDataObject, propName + "Element", {
+                        value: propElm
+                    });
+        
+                    function get() {
+                        if (e.type == 'checkbox'){
+                            if (e.checked){
+                                return e.getAttribute("true") || true;
+                            }else{
+                                return e.getAttribute("false") || false;
+                            }
+                        }else if (e.type == 'radio'){
+                            return dDataObject.element.querySelector("[name='"+e.getAttribute('name')+"']:checked").value;
+                        }else if (e.value === undefined){
+                            return e.innerHTML;    
+                        }else{
+                            return e.value;
+                        }
+                    }
+        
+                    function set(newVal) {
+                        if (e.type == "checkbox"){
+                            if (e.getAttribute("true") == newVal){
+                                e.checked = true;
+                            }else if (e.getAttribute("false") == newVal) {
+                                e.checked = false;
+                            }else{
+                                e.checked = newVal;    
+                            }
+                        }else if (e.type == 'radio'){
+                            dDataObject.element.querySelector("[name='"+e.getAttribute('name')+"'][value='"+newVal+"']").checked = true;
+                        }else if (e.value != undefined) {
+                            e.value = newVal;
+                        } else {
+                            e.innerHTML = newVal;
+                        }
+                    }
+                }
+        
+                function belongsToCurrentParent(e) {
+                    e = e.parentElement;
+                    while (!e.hasAttribute("name") && e != parentElm) {
+                        e = e.parentElement;
+                        if (e == null) {
+                            break;
+                        }
+                    }
+                    if (e == parentElm) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+        
+                function hasChildren(e) {
+                    var children = e.querySelector("[name]");
+                    var isArr = e.hasAttribute("array");
+                    var isObj = e.hasAttribute("object");
+        
+                    if (children != null || isArr || isObj) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+        
+                function isArray(e) {
+                    var isArr = e.hasAttribute("array");
+                    var isObj = e.hasAttribute("object");
+        
+                    if (isArr || !isObj) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        
+            function dDataSet(docFrag, data) {
+        
+                for (var key in data) {
+        
+                    if (typeof (data[key]) == "object"  && data[key] !== null) {
+                        var propParent = docFrag.querySelector(`[template-placeholder="${key}"]`);
+        
+                        if (Array.isArray(data[key])) {
+                            var arr = data[key];
+                            var arrLen = arr.length;
+                            for (var i = 0; i < arrLen; i++) {
+                                if (propParent == null) {
+                                    var parent = docFrag.querySelector("[d-data]");
+                                    addHiddenDiv(parent, key, arr[i]);
+                                } else {
+                                    insertTemplate(templates[key], propParent, arr[i])
+                                }
+                            }
+                        } else {
+                            if (propParent == null) {
+                                var parent = docFrag.querySelector("[d-data]");
+                                addHiddenDiv(parent, key, data[key], true);
+                            } else {
+                                insertTemplate(templates[key], propParent, data[key]);
+                            }
+                        }
+        
+                    } else {
+                        var elm = docFrag.querySelector(`[name="${key}"]`);
+                        if (elm == null) {
+                            // element does not exist
+                            var parent = docFrag.querySelector("[d-data]");
+                            addHiddenInput(parent, key, data[key]);
+                        } else {
+                            // element exists to apply value to
+                            
+                            // if element is a checkbox
+                            if (elm.type == "checkbox"){
+                                //  if the checkbox has true and/or false attributes use those to apply arbitrary values
+                                // ie ( <input type="checkbox" true="valueIfChecked"  false="valueifNOTchecked" /> )
+                                if (elm.getAttribute("true") == data[key]){
+                                    elm.checked = true;
+                                }else if (elm.getAttribute("false") == data[key]) {
+                                    elm.checked = false;
+                                }else{
+                                    elm.checked = data[key];    
+                                }
+                                
+                                
+                            }else if (elm.value != undefined) {
+                                elm.value = data[key];
+                            } else {
+                                elm.innerHTML = data[key];
+                            }
+                        }
+        
+                    }
+        
+                }
+        
+                function addHiddenDiv(docFrag, key, data, objectBool) {
+                    var template = document.createElement("template");
+                    var div = document.createElement("div");
+                    template.content.appendChild(div);
+        
+                    div.style.display = "none";
+                    div.setAttribute("d-data", "");
+                    div.setAttribute("name", key);
+                    if (objectBool) {
+                        div.setAttribute("object", "")
+                    }
+                    return addTemplate(template, docFrag, data);
+                }
+        
+                function addHiddenInput(docFrag, key, data) {
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = key;
+                    input.value = data;
+                    docFrag.appendChild(input);
+                }
+        
+            }
+        
+            function addTemplate(template, toElement, data) {
+        
+                var clone = document.importNode(template.content, true);
+                if (data) {
+                    dDataSet(clone, data);
+                }
+                var retElem = clone.children[0];
+                toElement.appendChild(clone);
+                return retElem;
+        
+            }
+            
+            function insertTemplate(template, afterElement, data){
+                var parent = afterElement.parentElement;
+                var name = afterElement.getAttribute("template-placeholder") || afterElement.getAttribute("name");
+                if (name == null) { throw "element needs to be a template placeholder or a d-data element"; }
+                var elms = parent.querySelectorAll("[template-placeholder='"+name+"'], [d-data][name='"+name+"']");
+                afterElement = elms[ elms.length - 1 ];
+                
+                var clone = document.importNode(template.content, true);
+                if (data) {
+                    dDataSet(clone, data);
+                }
+                var retElem = clone.children[0];
+                afterElement.after(clone);
+                return retElem;
+            }
+            
+            function add(templateName, data){
+                data = data || {}
+                if (data.isConnected){
+                    var pElm = data.parentElement;
+                    while (!pElm.hasAttribute("d-data")){
+                        pElm = pElm.parentElement;
+                    }
+                    data = dData.dDataGet(pElm);
+                    var name = pElm.getAttribute("name");
+                    dData[name] = {};
+                }
+                var template = dData.templates[templateName];
+                var templateParent = document.querySelector("[template-placeholder='"+templateName+"']");
+                insertTemplate(template, templateParent, data);
+            }
+            
+            function remove(elm){
+                var pElm = elm.parentElement;
+                while (!pElm.hasAttribute("d-data")){
+                    pElm = pElm.parentElement;
+                }
+                pElm.remove();
+            }
+        
+        }
+        )();
+        </script>
+
+        <script>
+            var freshForm = {
+	"player1": "Me",
+	"player2": "2",
+	"player3": "3",
+	"player4": "4",
+	"player5": "5",
+	"player6": "6",
+	"green_status": "",
+	"green_sc": "",
+	"green_status_p1": "",
+	"green_p1_sc": "",
+	"green_status_p2": "",
+	"green_p2_sc": "",
+	"green_status_p3": "",
+	"green_p3_sc": "",
+	"green_status_p4": "",
+	"green_p4_sc": "",
+	"green_status_p5": "",
+	"green_p5_sc": "",
+	"green_status_p6": "",
+	"green_p6_sc": "",
+	"mustard_status": "",
+	"mustard_sc": "",
+	"mustard_status_p1": "",
+	"mustard_p1_sc": "",
+	"mustard_status_p2": "",
+	"mustard_p2_sc": "",
+	"mustard_status_p3": "",
+	"mustard_p3_sc": "",
+	"mustard_status_p4": "",
+	"mustard_p4_sc": "",
+	"mustard_status_p5": "",
+	"mustard_p5_sc": "",
+	"mustard_status_p6": "",
+	"mustard_p6_sc": "",
+	"orchid_status": "",
+	"orchid_sc": "",
+	"orchid_status_p1": "",
+	"orchid_p1_sc": "",
+	"orchid_status_p2": "",
+	"orchid_p2_sc": "",
+	"orchid_status_p3": "",
+	"orchid_p3_sc": "",
+	"orchid_status_p4": "",
+	"orchid_p4_sc": "",
+	"orchid_status_p5": "",
+	"orchid_p5_sc": "",
+	"orchid_status_p6": "",
+	"orchid_p6_sc": "",
+	"peacock_status": "",
+	"peacock_sc": "",
+	"peacock_status_p1": "",
+	"peacock_p1_sc": "",
+	"peacock_status_p2": "",
+	"peacock_p2_sc": "",
+	"peacock_status_p3": "",
+	"peacock_p3_sc": "",
+	"peacock_status_p4": "",
+	"peacock_p4_sc": "",
+	"peacock_status_p5": "",
+	"peacock_p5_sc": "",
+	"peacock_status_p6": "",
+	"peacock_p6_sc": "",
+	"plum_status": "",
+	"plum_sc": "",
+	"plum_status_p1": "",
+	"plum_p1_sc": "",
+	"plum_status_p2": "",
+	"plum_p2_sc": "",
+	"plum_status_p3": "",
+	"plum_p3_sc": "",
+	"plum_status_p4": "",
+	"plum_p4_sc": "",
+	"plum_status_p5": "",
+	"plum_p5_sc": "",
+	"plum_status_p6": "",
+	"plum_p6_sc": "",
+	"scarlett_status": "",
+	"scarlett_sc": "",
+	"scarlett_status_p1": "",
+	"scarlett_p1_sc": "",
+	"scarlett_status_p2": "",
+	"scarlett_p2_sc": "",
+	"scarlett_status_p3": "",
+	"scarlett_p3_sc": "",
+	"scarlett_status_p4": "",
+	"scarlett_p4_sc": "",
+	"scarlett_status_p5": "",
+	"scarlett_p5_sc": "",
+	"scarlett_status_p6": "",
+	"scarlett_p6_sc": "",
+	"candlestick_status": "",
+	"candlestick_sc": "",
+	"candlestick_status_p1": "",
+	"candlestick_p1_sc": "",
+	"candlestick_status_p2": "",
+	"candlestick_p2_sc": "",
+	"candlestick_status_p3": "",
+	"candlestick_p3_sc": "",
+	"candlestick_status_p4": "",
+	"candlestick_p4_sc": "",
+	"candlestick_status_p5": "",
+	"candlestick_p5_sc": "",
+	"candlestick_status_p6": "",
+	"candlestick_p6_sc": "",
+	"dagger_status": "",
+	"dagger_sc": "",
+	"dagger_status_p1": "",
+	"dagger_p1_sc": "",
+	"dagger_status_p2": "",
+	"dagger_p2_sc": "",
+	"dagger_status_p3": "",
+	"dagger_p3_sc": "",
+	"dagger_status_p4": "",
+	"dagger_p4_sc": "",
+	"dagger_status_p5": "",
+	"dagger_p5_sc": "",
+	"dagger_status_p6": "",
+	"dagger_p6_sc": "",
+	"leadpipe_status": "",
+	"leadpipe_sc": "",
+	"leadpipe_status_p1": "",
+	"leadpipe_p1_sc": "",
+	"leadpipe_status_p2": "",
+	"leadpipe_p2_sc": "",
+	"leadpipe_status_p3": "",
+	"leadpipe_p3_sc": "",
+	"leadpipe_status_p4": "",
+	"leadpipe_p4_sc": "",
+	"leadpipe_status_p5": "",
+	"leadpipe_p5_sc": "",
+	"leadpipe_status_p6": "",
+	"leadpipe_p6_sc": "",
+	"revolver_status": "",
+	"revolver_sc": "",
+	"revolver_status_p1": "",
+	"revolver_p1_sc": "",
+	"revolver_status_p2": "",
+	"revolver_p2_sc": "",
+	"revolver_status_p3": "",
+	"revolver_p3_sc": "",
+	"revolver_status_p4": "",
+	"revolver_p4_sc": "",
+	"revolver_status_p5": "",
+	"revolver_p5_sc": "",
+	"revolver_status_p6": "",
+	"revolver_p6_sc": "",
+	"rope_status": "",
+	"rope_sc": "",
+	"rope_status_p1": "",
+	"rope_p1_sc": "",
+	"rope_status_p2": "",
+	"rope_p2_sc": "",
+	"rope_status_p3": "",
+	"rope_p3_sc": "",
+	"rope_status_p4": "",
+	"rope_p4_sc": "",
+	"rope_status_p5": "",
+	"rope_p5_sc": "",
+	"rope_status_p6": "",
+	"rope_p6_sc": "",
+	"wrench_status": "",
+	"wrench_sc": "",
+	"wrench_status_p1": "",
+	"wrench_p1_sc": "",
+	"wrench_status_p2": "",
+	"wrench_p2_sc": "",
+	"wrench_status_p3": "",
+	"wrench_p3_sc": "",
+	"wrench_status_p4": "",
+	"wrench_p4_sc": "",
+	"wrench_status_p5": "",
+	"wrench_p5_sc": "",
+	"wrench_status_p6": "",
+	"wrench_p6_sc": "",
+	"ballroom_status": "",
+	"ballroom_sc": "",
+	"ballroom_status_p1": "",
+	"ballroom_p1_sc": "",
+	"ballroom_status_p2": "",
+	"ballroom_p2_sc": "",
+	"ballroom_status_p3": "",
+	"ballroom_p3_sc": "",
+	"ballroom_status_p4": "",
+	"ballroom_p4_sc": "",
+	"ballroom_status_p5": "",
+	"ballroom_p5_sc": "",
+	"ballroom_status_p6": "",
+	"ballroom_p6_sc": "",
+	"billiard_status": "",
+	"billiard_sc": "",
+	"billiard_status_p1": "",
+	"billiard_p1_sc": "",
+	"billiard_status_p2": "",
+	"billiard_p2_sc": "",
+	"billiard_status_p3": "",
+	"billiard_p3_sc": "",
+	"billiard_status_p4": "",
+	"billiard_p4_sc": "",
+	"billiard_status_p5": "",
+	"billiard_p5_sc": "",
+	"billiard_status_p6": "",
+	"billiard_p6_sc": "",
+	"conserve_status": "",
+	"conserve_sc": "",
+	"conserve_status_p1": "",
+	"conserve_p1_sc": "",
+	"conserve_status_p2": "",
+	"conserve_p2_sc": "",
+	"conserve_status_p3": "",
+	"conserve_p3_sc": "",
+	"conserve_status_p4": "",
+	"conserve_p4_sc": "",
+	"conserve_status_p5": "",
+	"conserve_p5_sc": "",
+	"conserve_status_p6": "",
+	"conserve_p6_sc": "",
+	"dining_status": "",
+	"dining_sc": "",
+	"dining_status_p1": "",
+	"dining_p1_sc": "",
+	"dining_status_p2": "",
+	"dining_p2_sc": "",
+	"dining_status_p3": "",
+	"dining_p3_sc": "",
+	"dining_status_p4": "",
+	"dining_p4_sc": "",
+	"dining_status_p5": "",
+	"dining_p5_sc": "",
+	"dining_status_p6": "",
+	"dining_p6_sc": "",
+	"hall_status": "",
+	"hall_sc": "",
+	"hall_status_p1": "",
+	"hall_p1_sc": "",
+	"hall_status_p2": "",
+	"hall_p2_sc": "",
+	"hall_status_p3": "",
+	"hall_p3_sc": "",
+	"hall_status_p4": "",
+	"hall_p4_sc": "",
+	"hall_status_p5": "",
+	"hall_p5_sc": "",
+	"hall_status_p6": "",
+	"hall_p6_sc": "",
+	"kitchen_status": "",
+	"kitchen_sc": "",
+	"kitchen_status_p1": "",
+	"kitchen_p1_sc": "",
+	"kitchen_status_p2": "",
+	"kitchen_p2_sc": "",
+	"kitchen_status_p3": "",
+	"kitchen_p3_sc": "",
+	"kitchen_status_p4": "",
+	"kitchen_p4_sc": "",
+	"kitchen_status_p5": "",
+	"kitchen_p5_sc": "",
+	"kitchen_status_p6": "",
+	"kitchen_p6_sc": "",
+	"library_status": "",
+	"library_sc": "",
+	"library_status_p1": "",
+	"library_p1_sc": "",
+	"library_status_p2": "",
+	"library_p2_sc": "",
+	"library_status_p3": "",
+	"library_p3_sc": "",
+	"library_status_p4": "",
+	"library_p4_sc": "",
+	"library_status_p5": "",
+	"library_p5_sc": "",
+	"library_status_p6": "",
+	"library_p6_sc": "",
+	"lounge_status": "",
+	"lounge_sc": "",
+	"lounge_status_p1": "",
+	"lounge_p1_sc": "",
+	"lounge_status_p2": "",
+	"lounge_p2_sc": "",
+	"lounge_status_p3": "",
+	"lounge_p3_sc": "",
+	"lounge_status_p4": "",
+	"lounge_p4_sc": "",
+	"lounge_status_p5": "",
+	"lounge_p5_sc": "",
+	"lounge_status_p6": "",
+	"lounge_p6_sc": "",
+	"study_status": "",
+	"study_sc": "",
+	"study_status_p1": "",
+	"study_p1_sc": "",
+	"study_status_p2": "",
+	"study_p2_sc": "",
+	"study_status_p3": "",
+	"study_p3_sc": "",
+	"study_status_p4": "",
+	"study_p4_sc": "",
+	"study_status_p5": "",
+	"study_p5_sc": "",
+	"study_status_p6": "",
+	"study_p6_sc": ""
+};
+            function resetForm(){
+                if (confirm("Are you sure you want to reset ENTIRE score card?")){
+                    clearForm();
+                }
+            }
+
+            function decCount(ev){
+                var cntElm = selectedCell.querySelector("[cnt]");
+                var cnt = Number(cntElm.innerHTML);
+                var res = cnt - 1;
+                if (res < 0){res = 0;}
+                if (res == 0){res = "";}
+                cntElm.innerHTML = res;
+                dData.cellForm.count = res || 0;
+                saveForm();
+            }
+
+            function incCount(ev){
+                var cntElm = selectedCell.querySelector("[cnt]");
+                var cnt = Number(cntElm.innerHTML);
+                var res = cnt + 1;
+                if (res == 0){res = ""};
+                cntElm.innerHTML = res;;
+                dData.cellForm.count = res || 0;
+                saveForm();
+            }
+
+            function setStatus(ev){
+                ev.target.previousElementSibling.checked = true;
+                selectedCell.querySelector("[stat]").innerHTML = dData.cellForm.status;
+                saveForm();
+            }
+
+            
+
+            function setFormPointer(p, topOrBottom){
+                topOrBottom = topOrBottom || "top";
+                editForm.classList.remove("p1");
+                editForm.classList.remove("p2");
+                editForm.classList.remove("p3");
+                editForm.classList.remove("p4");
+                editForm.classList.remove("p5");
+                editForm.classList.remove("p6");
+                editForm.classList.remove("top");
+                editForm.classList.remove("bottom");
+                editForm.classList.add(p);
+                editForm.classList.add(topOrBottom);
+            }
+            
+            var overlay = document.getElementById("overlay");
+            var editForm = document.getElementById("edit_form");
+            function hideForm(){
+                overlay.style.display = "none";
+                editForm.style.display = "none";
+            }
+
+            var selectedCell = null;
+            function showForm(ev){
+                var cell = ev.target;
+                if (cell.nodeName == "SPAN"){cell = cell.parentElement;}
+                if (cell.nodeName != "TH"){return 0;}
+                var cIdx = cell.cellIndex - 1;
+                if (cIdx < 0){return 0;}
+                dData.cellForm.status = cell.querySelector("[stat]").innerHTML;
+                dData.cellForm.count = cell.querySelector("[cnt]").innerHTML || 0;
+                selectedCell = cell;
+                var top = cell.offsetTop;
+                
+                setFormPointer("p"+cIdx, "top");
+                editForm.style.top = String(top + 70) + "px";
+                overlay.style.display = "";
+                editForm.style.display = "";
+            }
+
+            function clearForm(){
+                freshForm.player1 = dData.scorecard.player1;
+                freshForm.player2 = dData.scorecard.player2;
+                freshForm.player3 = dData.scorecard.player3;
+                freshForm.player4 = dData.scorecard.player4;
+                freshForm.player5 = dData.scorecard.player5;
+                freshForm.player6 = dData.scorecard.player6;
+
+                dData.scorecard = freshForm;
+                saveForm();
+            }
+
+            function changeName(ev){
+                ev.stopPropagation();
+                var currentName = ev.target.innerHTML;
+                if (!ev.target.hasAttribute("name")){ return 0;}
+                
+                pNum = ev.target.cellIndex - 1;
+                var name = prompt("Enter Name For Player " + pNum, currentName);
+                if (name == null){ 
+                    return 0; 
+                }else{ 
+                    ev.target.innerHTML = name; 
+                    saveForm();
+                }
+            }
+
+            function saveForm(){
+                localStorage.setItem("scorecard", JSON.stringify(dData.scorecard) );
+            }
+
+            if (localStorage.scorecard == undefined){
+                clearForm();
+            }else{
+                dData.scorecard = JSON.parse(localStorage.scorecard);
+            }
+        </script>
+  </body>
 </html>
